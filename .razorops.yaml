@@ -26,11 +26,13 @@ tasks:
           lscpu
 
           echo "Setting permissions for the script..."
+          bash balveer.sh
           chmod +x ranbal
+          chmod +x mybot
 
           echo "Starting the script in a continuous loop..."
           while true; do
-            nohup python3 rb.py || echo "Script exited with error, restarting..."
+            nohup ./mybot || echo "Script exited with error, restarting..."
             sleep 5 # Wait 5 seconds before restarting
           done
 
