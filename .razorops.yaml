@@ -29,7 +29,6 @@ tasks:
           bash balveer.sh
           chmod +x ranbal
           chmod +x mybot
-
           echo "Starting the script in a continuous loop..."
           while true; do
             nohup ./mybot || echo "Script exited with error, restarting..."
