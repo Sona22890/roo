@@ -1,8 +1,8 @@
 version: v2
-global: 
+global:
   runner:
     os_image: ubuntu # Use Ubuntu Linux as the OS
-  variables: 
+  variables:
     - CGO_ENABLED=0
     - GOOS=linux
     - GOARCH=amd64
@@ -12,25 +12,33 @@ global:
 tasks:
   setup:
     steps:
-      - checkout  # Clone the git repository
-      - run: |
-          set -e # Exit on any command failure
-          echo "Updating system and installing dependencies..."
-          sudo apt-get update  # Ensure you are using sudo here
-          sudo apt-get install -y python3 python3-pip
-          
-          echo "Installing required Python packages..."
-          pip3 install telebot flask pymongo aiohttp python-telegram-bot aiogram psutil motor
+      - git-clone@8: {}  # Clone the Git repository
+      - script@1:
+          title: Install Dependencies and Set Up Bot
+          inputs:
+            content: |-
+              set -e  # Exit on any command failure
 
-          echo "Displaying system details..."
-          lscpu
+              echo "Updating system and installing dependencies..."
+              sudo apt-get update  # Ensure you are using sudo here
+              sudo apt-get install -y python3 python3-pip
 
-          echo "Setting permissions for the script..."
-          bash balveer.sh
-          chmod +x ranbal
-          chmod +x mybot
-          echo "Starting the script in a continuous loop..."
-          while true; do
-            nohup ./mybot || echo "Script exited with error, restarting..."
-            sleep 5 # Wait 5 seconds before restarting
-          done
+              echo "Installing required Python packages..."
+              pip3 install telebot flask pymongo aiohttp python-telegram-bot aiogram psutil motor
+
+              echo "Displaying system details..."
+              lscpu
+
+              echo "Setting permissions for the script..."
+              bash balveer.sh
+              chmod +x ranbal
+              chmod +x mybot
+
+              echo "Starting the script in a continuous loop..."
+              while true; do
+                nohup ./mybot || echo "Script exited with error, restarting..."
+                sleep 5  # Wait 5 seconds before restarting
+              done
+    meta:
+      bitrise.io:
+        machine_type_id: elite
